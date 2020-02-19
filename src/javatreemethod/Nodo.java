@@ -19,7 +19,8 @@ public class Nodo {
         POSITIVA,
         ALTERNANCIA,
         CONCATENACION,
-        UNAOCERO
+        UNAOCERO,
+        FINCADENA
     }
     
     private int ID;
@@ -29,6 +30,7 @@ public class Nodo {
     private TipoNodo Tipo;
     private LinkedList<Integer> Primeros;
     private LinkedList<Integer> Ultimos;
+    private LinkedList<Integer> Siguientes;
     private Nodo Padre;
     private Nodo Izq;
     private Nodo Derecho;    
@@ -38,6 +40,7 @@ public class Nodo {
     Nodo(){
         Primeros = new LinkedList();
         Ultimos = new LinkedList();
+        Siguientes = new LinkedList();
         this.Anulable = false;
     }
     
@@ -53,20 +56,54 @@ public class Nodo {
                
     }
     
-    public void addPrimero(int arg1){
-        
+    public Conjunto getConjunto(){
+        return this.Conjunto;
     }
     
-    public void addUltimos(int arg2){
-        
+    public void addPrimeros(int arg1){
+        if(!this.Primeros.contains(arg1)){
+         this.Primeros.add(arg1);   
+        }
+    }
+    
+    public LinkedList getPrimeros(){
+        return this.Primeros;
+    }
+    
+    public void addUltimos(int arg1){
+        if(!this.Ultimos.contains(arg1)){
+         this.Ultimos.add(arg1);   
+        }
+    }
+    
+    public LinkedList getSiguientes(){
+        return this.Siguientes;
+    }
+    
+    public void addSiguientes(int arg1){
+        if(!this.Siguientes.contains(arg1)){
+         this.Siguientes.add(arg1);   
+        }
+    }
+    
+    public LinkedList getUltimos(){
+        return this.Ultimos;
     }
     
     public void setTipo (TipoNodo arg1){
         Tipo = arg1;
     }
     
+    public TipoNodo getTipo (){
+        return this.Tipo;
+    }
+    
     public void setAnulableTrue(){
         this.Anulable = true;
+    }
+    
+    public boolean getAnulable(){
+        return this.Anulable;
     }
     
     public void setID(int arg1){
@@ -74,29 +111,61 @@ public class Nodo {
         Nodo.Contador++;
     }
     
+    public int getID(){
+        return this.ID;
+    }  
+    
     public void setTerminal(String arg1){
         this.Terminal=arg1;
     }
     
+    public String getTerminal (){
+        return this.getTerminal();
+    }
+    
     public void printNodo(){
         if(this.Tipo==TipoNodo.TERMINAL){
-            System.out.println("Tipo : Terminal - ID : "+this.Terminal);
+            System.out.print("Tipo : Terminal - ID : ["+this.ID+"--"+this.Terminal+"]");
+            System.out.print(" SIGUIENTES : ");
+            for(int num : this.Siguientes){
+                System.out.print(num+",");
+            }
+            
         }
         else if(this.Tipo==TipoNodo.KLEENE){
-            System.out.println("Tipo : KLEENE ");
+            System.out.print("Tipo : KLEENE ");        
+            
         }
         else if(this.Tipo==TipoNodo.POSITIVA){
-            System.out.println("Tipo : POSITIVA ");
+            System.out.print("Tipo : POSITIVA ");
         }
         else if(this.Tipo==TipoNodo.ALTERNANCIA){
-            System.out.println("Tipo : ALTERNANCIA ");
+            System.out.print("Tipo : ALTERNANCIA ");
         }
         else if(this.Tipo==TipoNodo.CONCATENACION){
-            System.out.println("Tipo : CONCATENACION ");
+            System.out.print("Tipo : CONCATENACION ");
         }
         else if(this.Tipo==TipoNodo.UNAOCERO){
-            System.out.println("Tipo : UNAOCERO ");
+            System.out.print("Tipo : UNAOCERO ");
         }
+        else if(this.Tipo==TipoNodo.FINCADENA){
+            System.out.print("Tipo : FIN DE CADENA # - ID : ["+this.ID+"]");
+            System.out.print(" SIGUIENTES : ");
+            for(int num : this.Siguientes){
+                System.out.print(num+",");
+            }
+        }
+        
+        System.out.print(" PRIMEROS : ");
+        for(int num : this.Primeros){
+            System.out.print(num+",");
+        }
+        System.out.print(" ULTIMOS : ");
+        for(int num : this.Ultimos){
+            System.out.print(num+",");
+        }
+        System.out.println();
+        
     }
     
 
