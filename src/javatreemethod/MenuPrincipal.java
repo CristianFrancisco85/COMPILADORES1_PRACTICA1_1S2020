@@ -236,7 +236,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         "	Definicion de mis expresiones regulares\n" +
         "!>\n" +
         "//Expresion regular \n" +
-        "Expresion1 -> . | \"Los \" \"El \" . + | {vocales} {otrasLetras} * | {abecedario} \"_\";\n" +
+        "Expresion1 -> . | \"Los \" \"El \" . + | {vocales} {otrasLetras} * | {abecedario} \"_\" ;\n" +
         "Expresion2 -> . +{abecedario}  . {conjnum} ? . \":\" +{abecedario};\n" +
         "Expresion3 -> . . . . . . * | {abecedario} \"_\" + {conjnum} \">\" + {conjnum} \"es \" | \"TRUE\" \"FALSE\" \".\" ;  //Expresion de COmparacion   \n" +
         "operaciones -> . +{digito} + . |\"+\" |\"-\" |\"*\" \"/\" +{digito};\n" +
@@ -264,7 +264,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         "	Fin del archivo\n" +
         "!>\n" +
         "}";
-        Scan.analizeText(Prueba);
+        Scan.analizeText(Prueba2);
         Scan.viewTokens();
         Scan.analizeTokens();
         Scan.viewExpresiones();

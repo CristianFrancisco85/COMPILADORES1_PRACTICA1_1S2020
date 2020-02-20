@@ -321,14 +321,14 @@ public class Scanner {
                         
                         else if(this.TablaToken.get(j).getTipo().equals("PUNTO_COMA")){
                             this.Expresiones.add(TempRegex);
-                            i=j;
-                            Nodo.Contador=1;
+                            i=j;                           
                             break;
                         }                                      
                     }
                     //AGREGA FIN DE CADENA AL FINAL
                     TempNodo.setTipo(Nodo.TipoNodo.FINCADENA);
                     TempNodo.setID(Nodo.Contador);
+                    Nodo.Contador=1;
                     TempNodo.addPrimeros(TempNodo.getID());
                     TempNodo.addUltimos(TempNodo.getID());
                     TempRegex.addNodo(TempNodo);
@@ -345,19 +345,20 @@ public class Scanner {
     
     public void viewExpresiones(){
         for(int i=0 ; i<=this.Expresiones.size()-1 ;i ++){
+            this.Expresiones.get(i).generarArbol();
             this.Expresiones.get(i).setAnulables();
             this.Expresiones.get(i).setPrimeros();
             this.Expresiones.get(i).setUltimos();
             this.Expresiones.get(i).setSiguientes();
+            this.Expresiones.get(i).setEstados();          
             this.Expresiones.get(i).printRegex();
         }
+        
     }
     
     public void analizeExpresiones(){
         for(int i=0 ; i<this.Expresiones.size() ;i ++){
-            for(int j =0 ;  j<Expresiones.get(i).getNodos().size();j++){
-                
-            }
+            
         }
     }
 }

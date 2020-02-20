@@ -61,7 +61,11 @@ public class Estado {
         this.ListaTransiciones.add(arg1);
     }
     
-    public LinkedList getTerminales(){
+    public LinkedList<Transicion> getTransiciones(){
+        return this.ListaTransiciones;
+    }
+    
+    public LinkedList<Integer> getTerminales(){
         return this.TerminalesID;
     }
     

@@ -29,10 +29,17 @@ public class Transicion {
         this.Destino = arg1;
     }
     
-    public void setID(int arg1){
-        this.IDTerminal=arg1;
+    public Estado getDestino(){
+        return this.Destino;
     }
     
+    public void setID(int arg1){
+        this.IDTerminal=arg1;
+    }   
+    
+    public int getID(){
+        return this.IDTerminal;
+    }
     
     
 }

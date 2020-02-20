@@ -41,6 +41,9 @@ public class Nodo {
         Primeros = new LinkedList();
         Ultimos = new LinkedList();
         Siguientes = new LinkedList();
+        Padre = null;
+        Izq = null;
+        Derecho = null;
         this.Anulable = false;
     }
     
@@ -168,7 +171,29 @@ public class Nodo {
         
     }
     
-
     
+    public Nodo getPadre(){
+        return this.Padre;
+    }
+    
+    public Nodo getIzquierdo(){
+        return this.Izq;
+    }
+    
+    public Nodo getDerecho(){
+        return this.Derecho;
+    }
+    
+    public void setPadre(Nodo arg1){
+        this.Padre=arg1;
+    }
+    
+    public void setIzquierdo(Nodo arg1){
+        this.Izq=arg1;
+    }
+    
+    public void setDerecho(Nodo arg1){
+        this.Derecho=arg1;
+    }
     
 }
