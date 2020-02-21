@@ -344,14 +344,17 @@ public class Scanner {
     }
     
     public void viewExpresiones(){
-        for(int i=0 ; i<=this.Expresiones.size()-1 ;i ++){
+        for(int i=0 ; i<this.Expresiones.size() ;i ++){
             this.Expresiones.get(i).generarArbol();
+            this.Expresiones.get(i).PreOrden(this.Expresiones.get(i).getRaizArbol());
+            System.out.println();
             this.Expresiones.get(i).setAnulables();
             this.Expresiones.get(i).setPrimeros();
             this.Expresiones.get(i).setUltimos();
             this.Expresiones.get(i).setSiguientes();
             this.Expresiones.get(i).setEstados();          
             this.Expresiones.get(i).printRegex();
+            
         }
         
     }

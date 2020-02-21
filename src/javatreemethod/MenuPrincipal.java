@@ -264,7 +264,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         "	Fin del archivo\n" +
         "!>\n" +
         "}";
-        Scan.analizeText(Prueba2);
+        Scan.analizeText(Prueba);
         Scan.viewTokens();
         Scan.analizeTokens();
         Scan.viewExpresiones();

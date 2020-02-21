@@ -83,16 +83,55 @@ public class Regex {
         
         while(TempNodo!=null){           
             Anterior=TempNodo;
-            
-            if(TempNodo.getIzquierdo()==null){
+            Nodo Aux = new Nodo();
+            if(Anterior.getIzquierdo()==null){
                 TempNodo=TempNodo.getIzquierdo();
             }
-            else if(TempNodo.getIzquierdo().getTipo()!=Nodo.TipoNodo.TERMINAL){
+            else if(Anterior.getIzquierdo().getTipo()!=Nodo.TipoNodo.TERMINAL){
                 TempNodo=TempNodo.getIzquierdo();
             }
-            else{
+                       
+            else if(Anterior.getDerecho()==null ) {
+                
+                if(Anterior.getTipo() == Nodo.TipoNodo.KLEENE || Anterior.getTipo() == Nodo.TipoNodo.POSITIVA || Anterior.getTipo() == Nodo.TipoNodo.UNAOCERO ){
+                    while(TempNodo!=null){
+                        Aux=Anterior;
+                        Anterior = Anterior.getPadre();
+                        if(Anterior.getDerecho()==null ) {
+                            if(Anterior.getTipo() != Nodo.TipoNodo.KLEENE && Anterior.getTipo() != Nodo.TipoNodo.POSITIVA && Anterior.getTipo() != Nodo.TipoNodo.UNAOCERO ){
+                                TempNodo=Anterior.getDerecho();
+                            }                         
+                        }
+                        else if(Anterior.getDerecho().getTipo()!=Nodo.TipoNodo.TERMINAL && Anterior.getDerecho()!=Aux){
+                            TempNodo=Anterior.getDerecho();
+                            break;
+                        }
+                    }
+                }
+                else{
+                  TempNodo=TempNodo.getDerecho();  
+                }
+                
+            }
+            else if(Anterior.getDerecho().getTipo()!=Nodo.TipoNodo.TERMINAL){
                 TempNodo=TempNodo.getDerecho();
             }
+            else{              
+                while(TempNodo!=null){
+                    Aux=Anterior;
+                    Anterior = Anterior.getPadre();
+                    if(Anterior.getDerecho()==null) {
+                        if(Anterior.getTipo() != Nodo.TipoNodo.KLEENE && Anterior.getTipo() != Nodo.TipoNodo.POSITIVA && Anterior.getTipo() != Nodo.TipoNodo.UNAOCERO ){
+                            TempNodo=Anterior.getDerecho();
+                        }                         
+                    }
+                    else if(Anterior.getDerecho().getTipo()!=Nodo.TipoNodo.TERMINAL && Anterior.getDerecho()!=Aux ){
+                        TempNodo=Anterior.getDerecho();
+                        break;
+                    }
+                }
+            }
+            
         }
         
         NuevoNodo.setPadre(Anterior);
@@ -104,12 +143,12 @@ public class Regex {
             if(Anterior.getIzquierdo()==null){              
                 Anterior.setIzquierdo(NuevoNodo);  
             }
-            else{
+            else if(Anterior.getDerecho()==null){
                 Anterior.setDerecho(NuevoNodo); 
             }
+            
         }
-        
-        
+       
     }
     
     public void setAnulables(){
@@ -174,6 +213,22 @@ public class Regex {
                 for ( int Primero : TempPrimeros){
                     TempNodo.addPrimeros(Primero);
                 }
+
+                //AGREGAR PRIMEROS DE SEGUNDO NODO
+                TempPrimeros=this.Nodos.get(i).getDerecho().getPrimeros();
+                for ( int Primero : TempPrimeros){
+                    TempNodo.addPrimeros(Primero);
+                } 
+                
+                this.Nodos.set(i, TempNodo);
+            }
+            else if(TempNodo.getTipo()==Nodo.TipoNodo.CONCATENACION){
+                        
+                //AGREGAR PRIMEROS DE PRIMERO NODO
+                TempPrimeros=this.Nodos.get(i).getIzquierdo().getPrimeros();
+                for ( int Primero : TempPrimeros){
+                    TempNodo.addPrimeros(Primero);
+                }
                 
                 //SI PRIMER NODO ES ANULABLE
                 if(this.Nodos.get(i).getIzquierdo().getAnulable()){
@@ -226,6 +281,22 @@ public class Regex {
                         TempNodo.addUltimos(Ultimo);
                     }
 
+                    //AGREGAR ULTIMOS DE PRIMER NODO
+                    TempUltimos=this.Nodos.get(i).getIzquierdo().getUltimos();
+                    for ( int Ultimo : TempUltimos){
+                        TempNodo.addUltimos(Ultimo);
+                    }   
+                    
+                    this.Nodos.set(i, TempNodo);
+            }
+            else if(TempNodo.getTipo()==Nodo.TipoNodo.CONCATENACION){
+
+                    //AGREGAR ULTIMOS SEGUNDO NODO
+                    TempUltimos=this.Nodos.get(i).getDerecho().getUltimos();
+                    for ( int Ultimo : TempUltimos){
+                        TempNodo.addUltimos(Ultimo);
+                    }
+
                     //SI SEGUNDO NODO ES ANULABLE
                     if(this.Nodos.get(i).getDerecho().getAnulable()){
                         //AGREGAR ULTIMOS DE PRIMER NODO
@@ -234,11 +305,12 @@ public class Regex {
                             TempNodo.addUltimos(Ultimo);
                         } 
                     }      
-                    
-                }
-              
-                this.Nodos.set(i, TempNodo);
+                    this.Nodos.set(i, TempNodo);
             }
+              
+                
+            }
+        
     }
     
     public void setSiguientes(){
@@ -330,7 +402,7 @@ public class Regex {
         Estado AuxEstado;
         Transicion NewTransicion;       
         
-        //PARA CADA ID DEL CONJUNTO
+        //PARA CADA ID DEL CONJUNTO DE TERMINALES
         for(int ID : TempTerminales){
             
             AuxEstado = new Estado();
@@ -343,7 +415,7 @@ public class Regex {
                 TempEstado.setAceptacion();
             }
             else{
-            //SI NO SE BUSCA NODO CON ID
+            //SI NO SE BUSCA NODO CON ID    
                 for(Nodo TempNodo : this.Nodos){
 
                     if(TempNodo.getID()==ID){                  
@@ -380,7 +452,13 @@ public class Regex {
         return -1;
     }
     
-    
+    public void PreOrden(Nodo Raiz){
+        if(Raiz!=null){
+            System.out.println(Raiz.getTipo());
+            PreOrden(Raiz.getIzquierdo());
+            PreOrden(Raiz.getDerecho());
+        }
+    }
     
     
     
