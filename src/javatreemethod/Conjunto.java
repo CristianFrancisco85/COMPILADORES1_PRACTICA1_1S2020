@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -54,6 +54,28 @@ public class Conjunto {
     
     public LinkedList<Integer> getCharList(){
         return this.CharList;
+    }
+    
+    public boolean testChar(char arg1){
+        //PROBAR EN INTERVALO
+        if(this.BeginInterval!=-1){
+            if((int)arg1>=this.BeginInterval && (int)arg1<=this.EndInterval){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        //PROBAR EN LISTA DE CARACTERES
+        else{
+            if(this.CharList.contains((int)arg1)){
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+        }
     }
     
 }

@@ -22,4 +22,12 @@ public class Palabra {
         this.ID = arg1;
     }
     
+    public String getID(){
+        return this.ID;
+    }
+    
+    public String getLexema(){
+        return this.Lexema;
+    }
+    
 }

@@ -5,6 +5,13 @@
  */
 package javatreemethod;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Cristian Meoño
@@ -58,8 +65,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         jButton1.setText("Generar Automatas");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Analizar Entradas");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Salida");
 
@@ -89,6 +106,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenu1.setText("Archivo");
 
         jMenuItem1.setText("Abrir");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setText("Guardar");
@@ -171,6 +193,58 @@ public class MenuPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        Scanner Scan = new Scanner();
+        String Archivo = this.jTextArea1.getText();
+        Scan.analizeText(Archivo);
+        Scan.viewTokens();
+        Scan.analizeTokens();
+        Scan.viewExpresiones();
+        Scan.testPalabras();
+        this.jTextArea2.setText(Scan.testPalabras());
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        String aux="";   
+        String texto="";
+        try
+        {
+         /**llamamos el metodo que permite cargar la ventana*/
+         JFileChooser file=new JFileChooser();
+         file.showOpenDialog(this);
+         /**abrimos el archivo seleccionado*/
+         File abre=file.getSelectedFile();
+
+         /**recorremos el archivo, lo leemos para plasmarlo
+         *en el area de texto*/
+         if(abre!=null)
+         {     
+            FileReader archivos=new FileReader(abre);
+            BufferedReader lee=new BufferedReader(archivos);
+            while((aux=lee.readLine())!=null)
+            {
+               texto+= aux+ "\n";
+            }
+               lee.close();
+          }    
+         }
+         catch(IOException ex)
+         {
+           JOptionPane.showMessageDialog(null,ex+"" +
+                 "\nNo se ha encontrado el archivo",
+                       "ADVERTENCIA!!!",JOptionPane.WARNING_MESSAGE);
+          }
+        this.jTextArea1.setText(texto);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -248,9 +322,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         "	Definicion de lexemas\n" +
         "!>\n" +
         "//error en la validacion del lexema\n" +
-        "Expresion1 : \"los murcielagos llevan_en_su_nombre_todas_las_vocales.\"; \n" +
+        "Expresion1 : \"Los murcielagos_llevan_en_su_nombre_todas_las_vocales\"; \n" +
         "//validacion exitosa del lexema\n" +
-        "Expresion1 : \"El murcielago es_una_animal_mamifero\";\n" +
+        "Expresion1 : \"El murcielago_es_una_animal_mamifero\";\n" +
         "//validacion exitosa del lexema\n" +
         "Expresion2 : \"numero 5: cinco\";\n" +
         "Expresion2 : \"numero 2\";\n" +
@@ -264,15 +338,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
         "	Fin del archivo\n" +
         "!>\n" +
         "}";
-        Scan.analizeText(Prueba);
-        Scan.viewTokens();
-        Scan.analizeTokens();
-        Scan.viewExpresiones();
         
+//        Scan.analizeText(Prueba2);
+//        Scan.viewTokens();
+//        Scan.analizeTokens();
+//        Scan.viewExpresiones();
+//        Scan.testPalabras();
         
         
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

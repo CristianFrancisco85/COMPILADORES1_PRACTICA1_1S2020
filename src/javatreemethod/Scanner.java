@@ -207,6 +207,7 @@ public class Scanner {
                     //CONTROLAR EXCEPCION
                 }
             }
+            
         }
     }
     
@@ -237,7 +238,7 @@ public class Scanner {
                         TempConjunto.setID(this.TablaToken.get(i).getLexema());
                         i+=3;                      
                         TempConjunto.setBeginInterval(this.TablaToken.get(i).getLexema());
-                        TempConjunto.setEndInterval(this.TablaToken.get(i).getLexema());
+                        TempConjunto.setEndInterval(this.TablaToken.get(i+2).getLexema());
                         Conjuntos.add(TempConjunto);
                     }
                                  
@@ -267,43 +268,50 @@ public class Scanner {
                     i+=2;
                     //AGREGA CONCATENACION AL PRINCIPIO
                     TempNodo.setTipo(Nodo.TipoNodo.CONCATENACION);
+                    TempNodo.setID2(Nodo.Contador2);
                     TempRegex.addNodo(TempNodo);
                     for( int j = i ;j>0;j++ ){
                         TempNodo = new Nodo();
                         
                         if(this.TablaToken.get(j).getTipo().equals("PUNTO")){
                             TempNodo.setTipo(Nodo.TipoNodo.CONCATENACION);
+                            TempNodo.setID2(Nodo.Contador2);
                             TempRegex.addNodo(TempNodo);
                         }                        
                         
                         else if(this.TablaToken.get(j).getTipo().equals("CADENA")){
+                            TempNodo.setTipo(Nodo.TipoNodo.TERMINAL);
                             TempNodo.setID(Nodo.Contador);
                             TempNodo.addPrimeros(TempNodo.getID());
                             TempNodo.addUltimos(TempNodo.getID());
                             TempNodo.setTerminal(this.TablaToken.get(j).getLexema());
-                            TempNodo.setTipo(Nodo.TipoNodo.TERMINAL);
+                            TempNodo.setID2(Nodo.Contador2);
                             TempRegex.addNodo(TempNodo);
                         }
                         
                         else if(this.TablaToken.get(j).getTipo().equals("SIGNO_ASTERISCO")){
                             TempNodo.setTipo(Nodo.TipoNodo.KLEENE);
                             TempNodo.setAnulableTrue();
+                            TempNodo.setID2(Nodo.Contador2);
                             TempRegex.addNodo(TempNodo);
                         }
                         
                         else if(this.TablaToken.get(j).getTipo().equals("SIGNO_MAS")){
                             TempNodo.setTipo(Nodo.TipoNodo.POSITIVA);
+                            TempNodo.setID2(Nodo.Contador2);
                             TempRegex.addNodo(TempNodo);
                         }
                         
                         else if(this.TablaToken.get(j).getTipo().equals("SIGNO_ALTERNANCIA")){
                             TempNodo.setTipo(Nodo.TipoNodo.ALTERNANCIA);
+                            TempNodo.setID2(Nodo.Contador2);
                             TempRegex.addNodo(TempNodo);
                         }
                         
                         else if(this.TablaToken.get(j).getTipo().equals("SIGNO_UNAOCERO")){
                             TempNodo.setTipo(Nodo.TipoNodo.UNAOCERO);
                             TempNodo.setAnulableTrue();
+                            TempNodo.setID2(Nodo.Contador2);
                             TempRegex.addNodo(TempNodo);
                         }
                         
@@ -316,6 +324,7 @@ public class Scanner {
                             TempNodo.setTerminal(this.TablaToken.get(j).getLexema());
                             TempNodo.setConjunto(this.TablaToken.get(j).getLexema(),this.Conjuntos);
                             j++;
+                            TempNodo.setID2(Nodo.Contador2);
                             TempRegex.addNodo(TempNodo);                         
                         }
                         
@@ -328,7 +337,9 @@ public class Scanner {
                     //AGREGA FIN DE CADENA AL FINAL
                     TempNodo.setTipo(Nodo.TipoNodo.FINCADENA);
                     TempNodo.setID(Nodo.Contador);
+                    TempNodo.setID2(Nodo.Contador2);
                     Nodo.Contador=1;
+                    Nodo.Contador2=1;
                     TempNodo.addPrimeros(TempNodo.getID());
                     TempNodo.addUltimos(TempNodo.getID());
                     TempRegex.addNodo(TempNodo);
@@ -353,10 +364,32 @@ public class Scanner {
             this.Expresiones.get(i).setUltimos();
             this.Expresiones.get(i).setSiguientes();
             this.Expresiones.get(i).setEstados();          
-            this.Expresiones.get(i).printRegex();
-            
-        }
+            this.Expresiones.get(i).printRegex(); 
+            this.Expresiones.get(i).graficarArbol();
+            this.Expresiones.get(i).graficarSiguientes();
+            this.Expresiones.get(i).graficarTransiciones();
+        }       
         
+    }
+    
+    public String testPalabras(){
+        boolean validacion;
+        String Salida="";
+        for (Regex TempRegex : this.Expresiones){
+            for(Palabra TempPalabra : this.Palabras){
+                
+                validacion =TempRegex.TestLexema(TempPalabra.getLexema());
+                if(validacion){
+                    System.out.println("Palabra "+TempPalabra.getID()+" aceptada por "+TempRegex.getID());
+                    Salida=Salida+"Palabra "+TempPalabra.getID()+" aceptada por "+TempRegex.getID()+"\n";
+                }
+                else{
+                    //System.out.println("Palabra "+TempPalabra.getID()+" rechazada por "+TempRegex.getID());
+                }
+                
+            }           
+        }
+        return Salida;
     }
     
     public void analizeExpresiones(){

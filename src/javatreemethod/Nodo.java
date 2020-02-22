@@ -24,6 +24,7 @@ public class Nodo {
     }
     
     private int ID;
+    private int ID2;
     private String Terminal;
     private Conjunto Conjunto;
     private boolean Anulable;
@@ -36,6 +37,7 @@ public class Nodo {
     private Nodo Derecho;    
     
     public static int Contador = 1;
+    public static int Contador2 = 1;
     
     Nodo(){
         Primeros = new LinkedList();
@@ -45,6 +47,7 @@ public class Nodo {
         Izq = null;
         Derecho = null;
         this.Anulable = false;
+        Conjunto = null;
     }
     
     public void setConjunto(String ID, LinkedList<Conjunto> arg2){
@@ -118,12 +121,21 @@ public class Nodo {
         return this.ID;
     }  
     
+    public void setID2(int arg1){
+        this.ID2 = arg1;
+        Nodo.Contador2++;
+    }
+    
+    public int getID2(){
+        return this.ID2;
+    }  
+    
     public void setTerminal(String arg1){
         this.Terminal=arg1;
     }
     
     public String getTerminal (){
-        return this.getTerminal();
+        return this.Terminal;
     }
     
     public void printNodo(){
@@ -170,8 +182,7 @@ public class Nodo {
         System.out.println();
         
     }
-    
-    
+ 
     public Nodo getPadre(){
         return this.Padre;
     }
@@ -196,4 +207,40 @@ public class Nodo {
         this.Derecho=arg1;
     }
     
+    //Testea el caracter en el Nodo
+    public boolean testChar(String arg1){
+        
+        
+        //SI ES UN TERMINAL NORMAL
+        if(this.getConjunto()==null){
+            //VALIDAR UN STRING
+            if(this.Terminal.length()>1){
+                if(this.Terminal.equals(arg1)){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+           
+            //SI NO VALIDAR UN CARACTER
+            else if (this.Terminal.charAt(0)==arg1.charAt(0)){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        //PROBAR EN CONJUNTO
+        else{
+            if(this.getConjunto().testChar(arg1.charAt(0))){
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+        }
+        
+    }
 }

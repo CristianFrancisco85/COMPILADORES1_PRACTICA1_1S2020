@@ -5,7 +5,14 @@
  */
 package javatreemethod;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedList;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 
 /**
  *
@@ -21,6 +28,10 @@ public class Regex {
     public void setID(String arg1){
         this.ID = arg1;
     }   
+    
+    public String getID(){
+        return this.ID;
+    }
     
     public void addNodo(Nodo arg1){
         this.Nodos.add(arg1);
@@ -328,15 +339,15 @@ public class Regex {
             if(TempNodo.getTipo()==Nodo.TipoNodo.CONCATENACION){
                 
                 
-                TempIDs1 = this.Nodos.get(i).getIzquierdo().getUltimos();
+                TempIDs1 = TempNodo.getIzquierdo().getUltimos();
                 if(i==0){
                     TempIDs2 = this.Nodos.getLast().getPrimeros();
                 }
                 else{
-                    TempIDs2 = this.Nodos.get(i).getDerecho().getUltimos();
+                    TempIDs2 = TempNodo.getDerecho().getPrimeros();
                 }               
                 
-                //PARA CADA ULTIMO EN C2
+                //PARA CADA ULTIMO EN C1
                 for(int ID1 : TempIDs1){
                     for(int j=0 ; j<this.Nodos.size();j++){
                         AuxNodo=this.Nodos.get(j);
@@ -353,8 +364,8 @@ public class Regex {
             }
             
             else if(TempNodo.getTipo()==Nodo.TipoNodo.KLEENE||TempNodo.getTipo()==Nodo.TipoNodo.POSITIVA){
-                TempIDs1 = this.Nodos.get(i).getIzquierdo().getUltimos();
-                TempIDs2 = this.Nodos.get(i).getIzquierdo().getPrimeros();
+                TempIDs1 = TempNodo.getIzquierdo().getUltimos();
+                TempIDs2 = TempNodo.getIzquierdo().getPrimeros();
                 
                 //PARA CADA ULTIMO EN C1
                 for(int ID1 : TempIDs1){
@@ -461,582 +472,241 @@ public class Regex {
     }
     
     
-    
-    
-    
-    
-    /*
-    
-        public void setAnulables(){
-        int TreeSize = this.Nodos.size()-1;
-        Nodo TempNodo = new Nodo();
-        for(int i=TreeSize;i >=0;i--){
-            TempNodo = new Nodo();
-            TempNodo=this.Nodos.get(i);
-           
-            if(TempNodo.getTipo()==Nodo.TipoNodo.POSITIVA){
-                if(this.Nodos.get(i+1).getAnulable()){
-                    TempNodo.setAnulableTrue();
-                }
-            }
-            else if(TempNodo.getTipo()==Nodo.TipoNodo.ALTERNANCIA){
-                int SegundoNodo = i+2;
-                int Contador=0;
-                //SI PRIMER NODO ES BINARIO
-                if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.ALTERNANCIA||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.CONCATENACION){
-                    
-                    for(int j=i+1;j <=TreeSize;j++){
-
-
-                        if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                           if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               SegundoNodo=j+3+Contador;
-                               break;
-                            }
-                            else{
-                                j=j+1;
-                            }
-                        }
-                        else{
-                            Contador++;
-                        }
-                    }
-                }
-                //SI PRIMER NODO ES UNARIO
-                if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.KLEENE||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.POSITIVA
-                 ||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.UNAOCERO){
-                    
-                    if(this.Nodos.get(i+2).getTipo()==Nodo.TipoNodo.TERMINAL){
-                        SegundoNodo=i+3;
-                    }
-                    
-                    else {
-                        for(int j=i+1;j <=TreeSize;j++){
-
-                            if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                                   SegundoNodo=j+3+Contador;
-                                   break;
-                                }
-                                else{
-                                    j=j+1;
-                                }
-                            }
-                            else{
-                                Contador++;
-                            }
-                        }
-                    }
-                    
-                }
-                
-                if( this.Nodos.get(i+1).getAnulable() || this.Nodos.get(SegundoNodo).getAnulable()  ){
-                    TempNodo.setAnulableTrue();
-                }
-            }
-            else if(TempNodo.getTipo()==Nodo.TipoNodo.CONCATENACION){
-                int SegundoNodo = i+2;
-                int Contador=0;  
-                //SI PRIMER NODO ES BINARIO
-                if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.ALTERNANCIA||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.CONCATENACION){
-
-                    for(int j=i+1;j <=TreeSize;j++){
-
-
-                        if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                           if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               SegundoNodo=j+3+Contador;
-                               break;
-                            }
-                            else{
-                                j=j+1;
-                            }
-                        }
-                        else{
-                            Contador++;
-                        }
-                    }
-                }
-                //SI PRIMER NODO ES UNARIO
-                if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.KLEENE||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.POSITIVA
-                 ||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.UNAOCERO){
-                    if(this.Nodos.get(i+2).getTipo()==Nodo.TipoNodo.TERMINAL){
-                        SegundoNodo=i+3;
-                    }
-                    
-                    else {
-                        for(int j=i+1;j <=TreeSize;j++){
-
-                            if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                                   SegundoNodo=j+3+Contador;
-                                   break;
-                                }
-                                else{
-                                    j=j+1;
-                                }
-                            }
-                            else{
-                                Contador++;
-                            }
-                        }
-                    }
-                }
-                if( this.Nodos.get(i+1).getAnulable() && this.Nodos.get(SegundoNodo).getAnulable()  ){
-                    TempNodo.setAnulableTrue();
-                }
-            }
+    public boolean TestLexema(String arg1){
+        int EstadoID=0;    
+        EstadoID=this.Estados.get(EstadoID).testChar(arg1,this.Nodos,this.Estados);
+        if(EstadoID==-1){
+            return false;
+        }        
+        else if(this.Estados.get(EstadoID).getAceptacion()){
+           return true; 
         }
+        else{
+            return false;
+        }
+         
     }
     
-    public void setPrimeros(){
-        int TreeSize = this.Nodos.size()-1;
-        Nodo TempNodo = new Nodo();
-        LinkedList<Integer> TempPrimeros =  new LinkedList();
-        for(int i=TreeSize;i >=0;i--){
-            TempNodo = new Nodo();
-            TempNodo=this.Nodos.get(i);
-           
-            if(TempNodo.getTipo()==Nodo.TipoNodo.KLEENE){
-                TempPrimeros=this.Nodos.get(i+1).getPrimeros();
-                for ( int Primero : TempPrimeros){
-                    TempNodo.addPrimeros(Primero);
-                }
-                this.Nodos.set(i, TempNodo);
-            }
-            else if(TempNodo.getTipo()==Nodo.TipoNodo.POSITIVA){
-                TempPrimeros=this.Nodos.get(i+1).getPrimeros();
-                for ( int Primero : TempPrimeros){
-                    TempNodo.addPrimeros(Primero);
-                }
-                this.Nodos.set(i, TempNodo);
-            }
-            else if(TempNodo.getTipo()==Nodo.TipoNodo.UNAOCERO){
-                TempPrimeros=this.Nodos.get(i+1).getPrimeros();
-                for ( int Primero : TempPrimeros){
-                    TempNodo.addPrimeros(Primero);
-                }
-                this.Nodos.set(i, TempNodo);
-            }
-            else if(TempNodo.getTipo()==Nodo.TipoNodo.ALTERNANCIA){
-                int SegundoNodo = i+2;
-                int Contador=0;
-                    
-                //SI PRIMER NODO ES BINARIO
-                if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.ALTERNANCIA||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.CONCATENACION){
-
-                    for(int j=i+1;j <=TreeSize;j++){
-
-
-                        if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                            
-                           if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               SegundoNodo=j+3+Contador;
-                               break;
-                            }
-                            else{
-                                j=j+1;
-                            }
-                        }
-                        else{
-                            Contador++;
-                        }
-                    }
-                }
-                //SI PRIMER NODO ES UNARIO
-                if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.KLEENE||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.POSITIVA
-                 ||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.UNAOCERO){
-                    if(this.Nodos.get(i+2).getTipo()==Nodo.TipoNodo.TERMINAL){
-                        SegundoNodo=i+3;
-                    }
-                    
-                    else {
-                        for(int j=i+1;j <=TreeSize;j++){
-
-                            if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                                   SegundoNodo=j+3+Contador;
-                                   break;
-                                }
-                                else{
-                                    j=j+1;
-                                }
-                            }
-                            else{
-                                Contador++;
-                            }
-                        }
-                    }
-                }
-                
-                //PRIMERO NODO
-                TempPrimeros=this.Nodos.get(i+1).getPrimeros();
-                for ( int Primero : TempPrimeros){
-                    TempNodo.addPrimeros(Primero);
-                }          
-                //SEGUNDO NODO
-                TempPrimeros=this.Nodos.get(SegundoNodo).getPrimeros();
-                for ( int Primero : TempPrimeros){
-                    TempNodo.addPrimeros(Primero);
-                }
-               
-                this.Nodos.set(i, TempNodo);
-            }
-            else if(TempNodo.getTipo()==Nodo.TipoNodo.CONCATENACION){
-                int SegundoNodo = i+2;
-                int Contador=0;
-                //SI PRIMER NODO ES BINARIO
-                if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.ALTERNANCIA||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.CONCATENACION){
-
-                    for(int j=i+1;j <=TreeSize;j++){
-
-
-                        if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                           if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               SegundoNodo=j+3+Contador;
-                               break;
-                            }
-                            else{
-                                j=j+1;
-                            }
-                        }
-                        else{
-                            Contador++;
-                        }
-                    }
-                }
-                //SI PRIMER NODO ES UNARIO
-                if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.KLEENE||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.POSITIVA
-                 ||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.UNAOCERO){
-                    if(this.Nodos.get(i+2).getTipo()==Nodo.TipoNodo.TERMINAL){
-                        SegundoNodo=i+3;
-                    }
-                    
-                    else {
-                        for(int j=i+1;j <=TreeSize;j++){
-
-                            if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                                   SegundoNodo=j+3+Contador;
-                                   break;
-                                }
-                                else{
-                                    j=j+1;
-                                }
-                            }
-                            else{
-                                Contador++;
-                            }
-                        }
-                    }
-                }
-                
-                //AGREGAR PRIMEROS DE PRIMERO NODO
-                TempPrimeros=this.Nodos.get(i+1).getPrimeros();
-                for ( int Primero : TempPrimeros){
-                    TempNodo.addPrimeros(Primero);
-                }
-                
-                //SI PRIMER NODO ES ANULABLE
-                if(this.Nodos.get(i+1).getAnulable()){
-                    //AGREGAR PRIMEROS DE SEGUNDO NODO
-                    TempPrimeros=this.Nodos.get(SegundoNodo).getPrimeros();
-                    for ( int Primero : TempPrimeros){
-                        TempNodo.addPrimeros(Primero);
-                    } 
-                }
-                
-                this.Nodos.set(i, TempNodo);
-            }
-        }
-    }
-    
-    public void setUltimos(){
-        int TreeSize = this.Nodos.size()-1;
-        Nodo TempNodo = new Nodo();
-        LinkedList<Integer> TempUltimos =  new LinkedList();
-        for(int i=TreeSize;i >=0;i--){
-            TempNodo = new Nodo();
-            TempNodo= this.Nodos.get(i);
-           
-            if(TempNodo.getTipo()==Nodo.TipoNodo.KLEENE){
-                TempUltimos=this.Nodos.get(i+1).getUltimos();
-                for ( int Ultimo : TempUltimos){
-                    TempNodo.addUltimos(Ultimo);
-                }
-                this.Nodos.set(i, TempNodo);
-            }
-            else if(TempNodo.getTipo()==Nodo.TipoNodo.POSITIVA){
-                TempUltimos=this.Nodos.get(i+1).getUltimos();
-                for ( int Ultimo : TempUltimos){
-                    TempNodo.addUltimos(Ultimo);
-                }
-                this.Nodos.set(i, TempNodo);
-            }
-            else if(TempNodo.getTipo()==Nodo.TipoNodo.UNAOCERO){
-                TempUltimos=this.Nodos.get(i+1).getUltimos();
-                for ( int Ultimo : TempUltimos){
-                    TempNodo.addUltimos(Ultimo);
-                }
-                this.Nodos.set(i, TempNodo);
-            }
-            else if(TempNodo.getTipo()==Nodo.TipoNodo.ALTERNANCIA){
-                
-                int SegundoNodo = i+2;
-                int Contador=0;   
-                //SI PRIMER NODO ES BINARIO
-                if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.ALTERNANCIA||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.CONCATENACION){
-
-                    for(int j=i+1;j <=TreeSize;j++){
-
-
-                        if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                           if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               SegundoNodo=j+3+Contador;
-                               break;
-                            }
-                            else{
-                               j=j+1;
-                            }
-                        }
-                        else{
-                            Contador++;
-                        }
-                    }
-                }
-                //SI PRIMER NODO ES UNARIO
-                if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.KLEENE||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.POSITIVA
-                 ||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.UNAOCERO){
-                    if(this.Nodos.get(i+2).getTipo()==Nodo.TipoNodo.TERMINAL){
-                        SegundoNodo=i+3;
-                    }
-                    
-                    else {
-                        for(int j=i+1;j <=TreeSize;j++){
-
-                            if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                            
-                                   SegundoNodo=j+3+Contador;                                  
-                                   break;
-                                }
-                                else{
-                                    j=j+1;
-                                }
-                            }
-                            else{
-                                Contador++;
-                            }
-                        }
-                    }
-                }
-                
-                //PRIMERO NODO
-                TempUltimos=this.Nodos.get(i+1).getUltimos();
-                for ( int Ultimo : TempUltimos){
-                    TempNodo.addUltimos(Ultimo);
-                }          
-                //SEGUNDO NODO
-                TempUltimos=this.Nodos.get(SegundoNodo).getUltimos();
-                for ( int Ultimo : TempUltimos){
-                    TempNodo.addUltimos(Ultimo);
-                }
-               
-                this.Nodos.set(i, TempNodo);
-            }
-            else if(TempNodo.getTipo()==Nodo.TipoNodo.CONCATENACION){
-                
-                if(i==0){
-                    TempNodo.addUltimos(this.Nodos.getLast().getID());
-                }
-                else{
-                    int SegundoNodo = i+2;
-                    int Contador = 0;
-                    //SI PRIMER NODO ES BINARIO
-                    if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.ALTERNANCIA||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.CONCATENACION){
-                        
-                        for(int j=i+1;j <=TreeSize;j++){
-                        
-                            
-                            if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                                   if(this.Nodos.get(j+3).getTipo()==Nodo.TipoNodo.KLEENE||this.Nodos.get(j+3).getTipo()==Nodo.TipoNodo.POSITIVA
-                                        ||this.Nodos.get(j+3).getTipo()==Nodo.TipoNodo.UNAOCERO){
-                                           Contador+=2;
-                                    }
-                                   SegundoNodo=j+3+Contador;
-                                   break;
-                                }
-                                else{
-                                    j=j+1;
-                                }
-                            }
-                            else{
-                                Contador++;
-                            }
-                            
-                        }
-                    }
-                    //SI PRIMER NODO ES UNARIO
-                    if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.KLEENE||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.POSITIVA
-                     ||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.UNAOCERO){
-                        
-                        if(this.Nodos.get(i+2).getTipo()==Nodo.TipoNodo.TERMINAL){
-                        SegundoNodo=i+3;
-                        }
-                    
-                        else {
-                            for(int j=i+1;j <=TreeSize;j++){
-
-                                if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                                   
-                                    if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-       
-                                       SegundoNodo=j+3+Contador;
-                                       break;
-                                    }
-                                    else{
-                                        j=j+1;
-                                    }
-                                }
-                                else{
-                                    Contador++;
-                                }
-                            }
-                        }
-                    }
-                    
-                    
-                    //AGREGAR ULTIMOS SEGUNDO NODO
-                    TempUltimos=this.Nodos.get(SegundoNodo).getUltimos();
-                    for ( int Ultimo : TempUltimos){
-                        TempNodo.addUltimos(Ultimo);
-                    }
-
-                    //SI SEGUNDO NODO ES ANULABLE
-                    if(this.Nodos.get(SegundoNodo).getAnulable()){
-                        //AGREGAR ULTIMOS DE PRIMER NODO
-                        TempUltimos=this.Nodos.get(i+1).getUltimos();
-                        for ( int Ultimo : TempUltimos){
-                            TempNodo.addUltimos(Ultimo);
-                        } 
-                    }      
-                    
-                }
-              
-                this.Nodos.set(i, TempNodo);
-            }
-        }
-    }
-    
-    public void setSiguientes(){
-        int TreeSize = this.Nodos.size()-1;
-        Nodo TempNodo = new Nodo();
-        Nodo AuxNodo = new Nodo();
-        LinkedList<Integer> TempIDs1 =  new LinkedList();
-        LinkedList<Integer> TempIDs2 =  new LinkedList();
+    public void graficarArbol(){
         
-        //SE RECORREN NODOS
-        for(int i=TreeSize;i >=0;i--){
-            TempNodo = new Nodo();
-            TempNodo=this.Nodos.get(i);
+        File f;
+        f = new File("/Users/cristianmeono/Desktop/COMPI/Arbol/Arbol"+this.ID+".dot");   
+        String Ruta="/Users/cristianmeono/Desktop/COMPI/Arbol/Arbol"+this.ID;
+        String Path = "/Users/cristianmeono/Desktop/";
+
+        //Escritura
+        try{
+            
+        if (!f.exists()) {
+                f.createNewFile();
+        }              
+        FileWriter w = new FileWriter(f);
+        BufferedWriter bw = new BufferedWriter(w);
+        PrintWriter wr = new PrintWriter(bw);	
+        wr.write("graph{\n");
+        for(int i = 0 ; i<this.Nodos.size();i++){
+            Nodo TempNodo = this.Nodos.get(i);
+            if(TempNodo.getTipo()==Nodo.TipoNodo.KLEENE||TempNodo.getTipo()==Nodo.TipoNodo.POSITIVA||TempNodo.getTipo()==Nodo.TipoNodo.UNAOCERO){
+                wr.append("\""+TempNodo.getID2()+"_"+this.NodeFormatter(TempNodo)+"\""+"--"+"\""+TempNodo.getIzquierdo().getID2()+"_"+this.NodeFormatter(TempNodo.getIzquierdo())+"\""+";\n");
+            }
+            else if(TempNodo.getTipo()!=Nodo.TipoNodo.TERMINAL&&TempNodo.getTipo()!=Nodo.TipoNodo.FINCADENA){
+            wr.append("\""+TempNodo.getID2()+"_"+this.NodeFormatter(TempNodo)+"\""+"--"+"\""+TempNodo.getIzquierdo().getID2()+"_"+this.NodeFormatter(TempNodo.getIzquierdo())+"\""+";\n");
+            wr.append("\""+TempNodo.getID2()+"_"+this.NodeFormatter(TempNodo)+"\""+"--"+"\""+TempNodo.getDerecho().getID2()+"_"+this.NodeFormatter(TempNodo.getDerecho())+"\""+";\n");
+            }
+        }
+            
+        wr.append("}"); 
+
+        wr.close();
+        bw.close();
+        ProcessBuilder pbuilder = new ProcessBuilder();
+        //pbuilder.command(" dot -Tpng -o "+Ruta+".png "+Ruta+".dot");
+        String Comando = " dot -Tpng -o "+Ruta+".png "+Ruta+".dot";
+        String direccionpng = Ruta+".png";
+        String direcciondot = Ruta+".dot";
+        pbuilder = new ProcessBuilder("/bin/bash","dot","-Tpng","-o",direccionpng,direcciondot);
+        pbuilder.redirectErrorStream(true);
+        pbuilder.start();
+        }
+        catch(IOException e){
+             e.printStackTrace();
+        };
            
-            if(TempNodo.getTipo()==Nodo.TipoNodo.CONCATENACION){
-                int SegundoNodo = i+2;
-                int Contador=0;   
-                //SI PRIMER NODO ES BINARIO
-                if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.ALTERNANCIA||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.CONCATENACION){
+        }
+    
+    public String NodeFormatter(Nodo arg1){
+            if(arg1.getTipo()==Nodo.TipoNodo.ALTERNANCIA){
+                return "|";
+            }
+            else if(arg1.getTipo()==Nodo.TipoNodo.CONCATENACION){
+                return ".";
+            }
+            else if(arg1.getTipo()==Nodo.TipoNodo.FINCADENA){
+                return "#";
+            }
+            else if(arg1.getTipo()==Nodo.TipoNodo.KLEENE){
+                return "*";
+            }
+            else if(arg1.getTipo()==Nodo.TipoNodo.POSITIVA){
+                return "+";
+            }
+            else if(arg1.getTipo()==Nodo.TipoNodo.TERMINAL){
+                return arg1.getTerminal();
+            }
+            else if(arg1.getTipo()==Nodo.TipoNodo.UNAOCERO){
+                return ".";
+            }
+            return "";
+        }
+    
+    public String ListString(LinkedList<Integer> Lista){
+        String Aux = "";
+        for(int aux : Lista){
+            Aux= Aux+Integer.toString(aux)+",";
+        }
+        return Aux;
+    }
+    
+    public void graficarSiguientes(){
+        File f;
+        f = new File("/Users/cristianmeono/Desktop/COMPI/Siguientes/Siguientes"+this.ID+".dot");   
+        String Ruta="/Users/cristianmeono/Desktop/COMPI/Siguientes/Siguientes"+this.ID;
+        String Path = "/Users/cristianmeono/Desktop/";
 
-                    for(int j=i+1;j <=TreeSize;j++){
-
-                        if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                           if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               SegundoNodo=j+3+Contador;
-                               break;
-                            }
-                            else{
-                                j=j+1;
-                            }
-                        } 
-                        else{
-                            Contador++;
-                        }
-                    }
-                }
-                //SI PRIMER NODO ES UNARIO
-                if(this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.KLEENE||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.POSITIVA
-                 ||this.Nodos.get(i+1).getTipo()==Nodo.TipoNodo.UNAOCERO){
-                    if(this.Nodos.get(i+2).getTipo()==Nodo.TipoNodo.TERMINAL){
-                        SegundoNodo=i+3;
-                    }
-                    
-                    else {
-                        for(int j=i+1;j <=TreeSize;j++){
-
-                            if(this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+1).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                               if(this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.ALTERNANCIA && this.Nodos.get(j+2).getTipo()!=Nodo.TipoNodo.CONCATENACION){
-                                   SegundoNodo=j+3+Contador;
-                                   break;
-                                }
-                                else{
-                                    j=j+1;
-                                }
-                            }
-                            else{
-                                Contador++;
-                            }
-                        }
-                    }
-                }
-                
-                TempIDs1 = this.Nodos.get(i+1).getUltimos();
-                if(i==0){
-                    TempIDs2 = this.Nodos.getLast().getPrimeros();
-                }
-                else{
-                    TempIDs2 = this.Nodos.get(SegundoNodo).getPrimeros();
-                }               
-                
-                //PARA CADA ULTIMO EN C2
-                for(int ID1 : TempIDs1){
-                    for(int j=0 ; j<this.Nodos.size();j++){
-                        AuxNodo=this.Nodos.get(j);
-                        if(AuxNodo.getID()==ID1){
-                            //CADA PRIMERO DE C2 ES SIGUIENTE
-                            for(int ID2 : TempIDs2){
-                                AuxNodo.addSiguientes(ID2);
-                            }
-                            this.Nodos.set(j, AuxNodo);
-                            break;
-                        }
-                    }
-                }                
+        //Escritura
+        try{
+            
+        if (!f.exists()) {
+                f.createNewFile();
+        }              
+        FileWriter w = new FileWriter(f);
+        BufferedWriter bw = new BufferedWriter(w);
+        PrintWriter wr = new PrintWriter(bw);	
+        wr.write("graph{\n");
+        for(int i = 0 ; i<this.Nodos.size();i++){
+            Nodo TempNodo = this.Nodos.get(i);
+            if(TempNodo.getID()>=1){
+                wr.append("\" Hoja: "+TempNodo.getTerminal()+" -- ID: "+this.NodeFormatter(TempNodo)+" -- Siguientes: "+this.ListString(TempNodo.getSiguientes())+"\"");
             }
             
-            else if(TempNodo.getTipo()==Nodo.TipoNodo.KLEENE||TempNodo.getTipo()==Nodo.TipoNodo.POSITIVA){
-                TempIDs1 = this.Nodos.get(i+1).getUltimos();
-                TempIDs2 = this.Nodos.get(i+1).getPrimeros();
-                
-                //PARA CADA ULTIMO EN C1
-                for(int ID1 : TempIDs1){
-                    
-                    for(int j=0 ; j<this.Nodos.size();j++){
-                        AuxNodo=this.Nodos.get(j);
-                        if(AuxNodo.getID()==ID1){
-                            //CADA PRIMERO DE C1 ES SIGUIENTE
-                            for(int ID2 : TempIDs2){
-                                AuxNodo.addSiguientes(ID2);
-                            }
-                            this.Nodos.set(j, AuxNodo);
-                            break;
-                        }
-                    }
-                } 
-                
-            }                   
         }
-        
+            
+        wr.append("}"); 
+
+        wr.close();
+        bw.close();
+        ProcessBuilder pbuilder = new ProcessBuilder();        
+        String direccionpng = Ruta+".png";
+        String direcciondot = Ruta+".dot";
+        //ProcessBuilder pbuilder = new ProcessBuilder("/bin/bash","dot","-Tpng","-o",direccionpng,direcciondot);
+//        pbuilder.command(" dot -Tpng -o "+Ruta+".png "+Ruta+".dot");
+//        pbuilder.redirectErrorStream(true);
+//        pbuilder.start();
+        }
+        catch(IOException e){
+             e.printStackTrace();
+        };
     }
-    */
     
-}
+    public void graficarTransiciones(){
+        File f;
+        f = new File("/Users/cristianmeono/Desktop/COMPI/Transiciones/Transiciones"+this.ID+".dot");   
+        String Ruta="/Users/cristianmeono/Desktop/COMPI/Transiciones/Transiciones"+this.ID;
+        String Path = "/Users/cristianmeono/Desktop/";
+
+        //Escritura
+        try{
+            
+        if (!f.exists()) {
+                f.createNewFile();
+        }              
+        FileWriter w = new FileWriter(f);
+        BufferedWriter bw = new BufferedWriter(w);
+        PrintWriter wr = new PrintWriter(bw);	
+        wr.write("graph{\n");
+        for(int i = 0 ; i<this.Estados.size();i++){
+            Estado TempNodo = this.Estados.get(i);
+            wr.append("\" Estado: S"+TempNodo.getID()+" Transiciones : \n");
+            for(Transicion TempTransicion : TempNodo.getTransiciones()){
+                wr.append("Terminal : "+TempTransicion.getID()+ " Hacia Estado S"+TempTransicion.getDestino().getID()+"\n");
+            }
+            wr.append("\"\n");
+        
+        }
+            
+        wr.append("}"); 
+
+        wr.close();
+        bw.close();
+        ProcessBuilder pbuilder = new ProcessBuilder();        
+        String direccionpng = Ruta+".png";
+        String direcciondot = Ruta+".dot";
+        //ProcessBuilder pbuilder = new ProcessBuilder("/bin/bash","dot","-Tpng","-o",direccionpng,direcciondot);
+//        pbuilder.command(" dot -Tpng -o "+Ruta+".png "+Ruta+".dot");
+//        pbuilder.redirectErrorStream(true);
+//        pbuilder.start();
+        }
+        catch(IOException e){
+             e.printStackTrace();
+        };
+    }
+    
+    public void graficarAFD(){
+        File f;
+        f = new File("/Users/cristianmeono/Desktop/AFD"+this.ID+".dot");   
+        String Ruta="/Users/cristianmeono/Desktop/AFD"+this.ID;
+        String Path = "/Users/cristianmeono/Desktop/";
+
+        //Escritura
+        try{
+            
+        if (!f.exists()) {
+                f.createNewFile();
+        }              
+        FileWriter w = new FileWriter(f);
+        BufferedWriter bw = new BufferedWriter(w);
+        PrintWriter wr = new PrintWriter(bw);	
+        wr.write("graph{\n");
+        for(int i = 0 ; i<this.Estados.size();i++){
+            Estado TempNodo = this.Estados.get(i);
+            wr.append("\" Estado: S"+TempNodo.getID()+" Transiciones : \n");
+            for(Transicion TempTransicion : TempNodo.getTransiciones()){
+                wr.append("Terminal : "+TempTransicion.getID()+ " Hacia Estado S"+TempTransicion.getDestino().getID()+"\n");
+            }
+            wr.append("\"\n");
+        
+        }
+            
+        wr.append("}"); 
+
+        wr.close();
+        bw.close();
+        ProcessBuilder pbuilder = new ProcessBuilder();        
+        String direccionpng = Ruta+".png";
+        String direcciondot = Ruta+".dot";
+        //ProcessBuilder pbuilder = new ProcessBuilder("/bin/bash","dot","-Tpng","-o",direccionpng,direcciondot);
+//        pbuilder.command(" dot -Tpng -o "+Ruta+".png "+Ruta+".dot");
+//        pbuilder.redirectErrorStream(true);
+//        pbuilder.start();
+        }
+        catch(IOException e){
+             e.printStackTrace();
+        };
+    }
+    
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+ 
+
